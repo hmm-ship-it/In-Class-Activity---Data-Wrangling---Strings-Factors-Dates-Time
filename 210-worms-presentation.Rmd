@@ -1,0 +1,51 @@
+---
+title: "worms demo"
+output: html_notebook
+author: Maggie Seida
+---
+
+Example, biodiversity assesment: A team of scientists are on an expedition to determine the biodiveristy of Monterey Bay. By scuba diving, taking data from a boat, and conducting tide pool surveys, they identify 500 different species in the bay.  
+
+This is great, but they're running out of funding! Coincidentally, there is a philanthropist in town who loves sea slugs, specifically nudibranchs ("nudi"=naked, "branch"=gills). If the team can show that from the data they've collected so far, 20% of the species are nudies, the philanthropist will donate $500,000 to fund their research.   
+  
+The problem is, they didn't sort their data as they collected it, so marine birds are mixed with fish which are mixed with sea slugs!
+
+
+```{r}
+#install.packages("worms") #remove #s to run install code
+library(worms)
+
+taxon_names <- c( "Pelecanus occidentalis", "Felimare porterae", "Strongylocentrotus purpuratus", "Enhydra lutris", "Flabellinopsis iodinea", "Zalophus californianus", "Patiria miniata", "Stereolepis gigas", "Anarrhichthys ocellatus", "Melibe leonina", "Aplysia californica", "Acmaea mitra", "Lottia pelta") #Here we are listing our unorganized, Monterey marine species, by scientific name
+w <- wormsbynames(taxon_names) #verifies all names are correct and up-to-date
+
+```
+
+```{r}
+SOS <- wormsbynames(taxon_names, ids = FALSE, match = FALSE, verbose = TRUE,
+chunksize = 4, like = "false", marine_only = "true",
+sleep_btw_chunks_in_sec = 0.1) #names a data set with marine only species (maybe someone included a terrestrial bird?) and requests species info from WoRMs based on species name
+```
+
+```{r}
+SOS #let's look at what this gives us
+```
+
+
+
+```{r}
+gastropoda=subset(SOS, class=="Gastropoda")
+
+gastropoda #sea slugs are within the gastropod class, how many gastropods do we have?
+```
+>Here we can see that 5 of the 13 species are gastropods. But how many are nudibranchs?
+
+```{r}
+nudibranchia=subset(gastropoda, order="Nudibranchia")
+nudibranchia #let's sort out only the nudibranchs
+```
+>Here we can see that 3 of the 5 gastropods are nudibranchs!!
+
+Out of our species, 23.1% are nudibranchs!!
+
+Funding received!!!
+
